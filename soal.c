@@ -5,15 +5,12 @@
 
 int main(){
 	struct Soal_N_Jawaban section; 
+	char filename[] = "sample.txt";
 	
-	section_to_struct(&section, "sample.txt", 4);
-	
-	printf("%s", section.soal);
-	printf("%s", section.jawaban_a);
-	printf("%s", section.jawaban_b);
-	printf("%s", section.jawaban_c);
-	printf("%s", section.jawaban_d);
-	
+	if (is_file_valid(filename)){
+		// proses
+	}
+
 	return 0;
 }
 
