@@ -1,5 +1,7 @@
 #define SIZE 256 // besarnya buffer untuk struct
 #define ESC 27
+#define RED 12
+#define WHITE 15
 
 // untuk mempermudah penamaan, 
 // kumpulan soal dan jawaban dinamakan section
@@ -11,7 +13,7 @@ struct Soal_N_Jawaban{
 	char jawaban_d[SIZE];
 };
 
-void SetCursorPosition(int XPos, int YPos) {
+void SetCursorPosition(int XPos, int YPos){
 	COORD coord;
 	coord.X = XPos; 
 	coord.Y = YPos;
@@ -38,7 +40,7 @@ void timer(int time, int *flag_ujian){
 	
 	// show grade here
 	SetCursorPosition(0, 9);
-	printf("\SHOW GRADE HERE");
+	printf("\nSHOW GRADE HERE");
 }
 
 // menghitung banyaknya line pada file
@@ -174,7 +176,7 @@ int is_file_valid(char filename[]){
 // fungsi untuk menampilkan soal sekaligus menerima jawaban,
 // berfungsi juga sebagai navigasi soal (berpindah dari satu soal ke soal yang lain)
 void display_test(char filename[], int *flag_ujian){
-	int i;
+	int i, j;
 	int num = 1;  // nomor soal sekarang;
 	char ch, container_jawaban[4][SIZE];
 	struct Soal_N_Jawaban section;
@@ -183,7 +185,9 @@ void display_test(char filename[], int *flag_ujian){
 	
 	// jumlah soal ujian yang akan ditampilkan
 	int banyak_soal = count_lines(filename)/5; 
-	int *jwbn_sementara = (int*)calloc(banyak_soal, sizeof(int));
+	int jwbn_sementara[banyak_soal];
+	
+	for (j = 0; j < banyak_soal; j++) jwbn_sementara[j] = 0; 
 
 	while(*flag_ujian){
 		section_to_struct(&section, filename, num);
@@ -198,9 +202,9 @@ void display_test(char filename[], int *flag_ujian){
 			// jika ada yang telah dijawab maka akan dihighlight
 			int is_highlight = (jwbn_sementara[num] != 0 && jwbn_sementara[num] == i+1);
 			
-			if (is_highlight) SetConsoleTextAttribute(h, 12);
+			if (is_highlight) SetConsoleTextAttribute(h, RED);
 			printf("     %s", container_jawaban[i]);			
-			if (is_highlight) SetConsoleTextAttribute(h, 7);
+			if (is_highlight) SetConsoleTextAttribute(h, WHITE);
 				
 		}
 		printf("\n<<<(1)\t\t\t\t\t\t\t(0)>>>\n");	

@@ -14,7 +14,7 @@ int main(){
 	//char jawaban[SIZE1]
 	//char jwb_sementara[SIZE1][SIZE1];
 	
-	int TIME = 0*60 + 10%60; // M : S
+	int TIME = 2*60 + 2%60; // M : S
 	char filename[] = "sample.txt";
 	
 	int ujian_berlangsung = 1;
