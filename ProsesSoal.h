@@ -11,6 +11,36 @@ struct Soal_N_Jawaban{
 	char jawaban_d[SIZE];
 };
 
+void SetCursorPosition(int XPos, int YPos) {
+	COORD coord;
+	coord.X = XPos; 
+	coord.Y = YPos;
+	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
+}
+
+void timer(int time, int *flag_ujian){
+	int minutes, seconds;
+	
+	while (time >= 0){
+		minutes = time / 60;
+		seconds = time % 60;
+		
+		// adjust cursor position as necessary
+		SetCursorPosition(0, 0);
+		printf("  TIMER %02d:%02d", minutes, seconds);
+		SetCursorPosition(0, 2);
+		
+		time -= 1;
+		Sleep(1000); // interval 1 detik
+	}
+	
+	*flag_ujian = 0;
+	
+	// show grade here
+	SetCursorPosition(0, 9);
+	printf("\SHOW GRADE HERE");
+}
+
 // menghitung banyaknya line pada file
 int count_lines(char filename[]){
 	char c;
@@ -143,7 +173,7 @@ int is_file_valid(char filename[]){
 
 // fungsi untuk menampilkan soal sekaligus menerima jawaban,
 // berfungsi juga sebagai navigasi soal (berpindah dari satu soal ke soal yang lain)
-void display_test(char filename[]){
+void display_test(char filename[], int *flag_ujian){
 	int i;
 	int num = 1;  // nomor soal sekarang;
 	char ch, container_jawaban[4][SIZE];
@@ -155,25 +185,25 @@ void display_test(char filename[]){
 	int banyak_soal = count_lines(filename)/5; 
 	int *jwbn_sementara = (int*)calloc(banyak_soal, sizeof(int));
 
-	while(1){
+	while(*flag_ujian){
 		section_to_struct(&section, filename, num);
 		strcpy(container_jawaban[0], section.jawaban_a); 
 		strcpy(container_jawaban[1], section.jawaban_b);
 		strcpy(container_jawaban[2], section.jawaban_c); 
 		strcpy(container_jawaban[3], section.jawaban_d); 
 		
-		printf("%s", section.soal);
+		printf("  %s", section.soal);
 		for (i = 0; i < 4; i++){
 			// cek yang telah dipilih sebelumnya 
 			// jika ada yang telah dijawab maka akan dihighlight
 			int is_highlight = (jwbn_sementara[num] != 0 && jwbn_sementara[num] == i+1);
 			
 			if (is_highlight) SetConsoleTextAttribute(h, 12);
-			printf("   %s", container_jawaban[i]);			
+			printf("     %s", container_jawaban[i]);			
 			if (is_highlight) SetConsoleTextAttribute(h, 7);
 				
 		}
-		printf("\n<<<\t\t\t\t\t\t\t\t\t\t>>>\n");	
+		printf("\n<<<(1)\t\t\t\t\t\t\t(0)>>>\n");	
 
 		ch = getch();
 		
@@ -199,6 +229,7 @@ void display_test(char filename[]){
 		}
 					
 		system("cls");
+		SetCursorPosition(0, 2);
 	}
 }
 
