@@ -4,7 +4,7 @@
 #include <windows.h>
 #include <conio.h>
 #include "ProsesSoal.h"
-#define SIZE1 5 //jumlah soal ujian yang akan ditampilkan
+#define SIZE1 10 //jumlah soal ujian yang akan ditampilkan
 
 void display(char jwb_sementara[SIZE1][SIZE1], char filename[]); //function prototype
 
@@ -29,8 +29,7 @@ void display(char jwb_sementara[SIZE1][SIZE1], char filename[]){
 	HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
 	
 	//looping sebanyak jumlah soal
-	for(i=1; i<=SIZE1; i++){
-	
+	for(i=1; i<=SIZE1; i++){	
 		section_to_struct(&section, "sample.txt", i);
 		
 		//menampilkan soal sekaligus meminta input dari user berupa jawaban
@@ -39,6 +38,9 @@ void display(char jwb_sementara[SIZE1][SIZE1], char filename[]){
 		printf("%s", section.jawaban_b);
 		printf("%s", section.jawaban_c);
 		printf("%s", section.jawaban_d);
+		if(i == SIZE1){
+			printf("\n");
+		}
 		printf("\nJawaban: ");
 		scanf("%s", &jwb_sementara[i]);
 		
@@ -49,6 +51,7 @@ void display(char jwb_sementara[SIZE1][SIZE1], char filename[]){
 		}//error handling
 		
 		//mengecek setiap jawaban user, jawaban yang dipilih oleh user akan dihighlight
+		//jika jawaban yang diinput user adalah A maka pilihan jawaban A akan dihighlight
 		if(strcmpi(jwb_sementara[i], "A") == 0){
 			system("cls");
 			printf("%s", section.soal);
@@ -62,6 +65,7 @@ void display(char jwb_sementara[SIZE1][SIZE1], char filename[]){
 			printf("%s", section.jawaban_d);
 		}
 		
+		//jika jawaban yang diinput user adalah B maka pilihan jawaban B akan dihighlight
 		else if(strcmpi(jwb_sementara[i], "B") == 0){
 			system("cls");
 			printf("%s", section.soal);
@@ -75,6 +79,7 @@ void display(char jwb_sementara[SIZE1][SIZE1], char filename[]){
 			printf("%s", section.jawaban_d);
 		}
 		
+		//jika jawaban yang diinput user adalah C maka pilihan jawaban C akan dihighlight
 		else if(strcmpi(jwb_sementara[i], "C") == 0){
 			system("cls");
 			printf("%s", section.soal);
@@ -88,6 +93,7 @@ void display(char jwb_sementara[SIZE1][SIZE1], char filename[]){
 			printf("%s", section.jawaban_d);
 		}
 		
+		//jika jawaban yang diinput user adalah D maka pilihan jawaban D akan dihighlight
 		else if(strcmpi(jwb_sementara[i], "D") == 0){
 			system("cls");
 			printf("%s", section.soal);
@@ -101,26 +107,29 @@ void display(char jwb_sementara[SIZE1][SIZE1], char filename[]){
 			SetConsoleTextAttribute(h,7);
 		}
 		
+		if(i == SIZE1){
+			printf("\n");
+		}
 		printf("\n<<<<\t\t\t\t\t\t\t\t\t\t\t\t\t\t>>>>\n");
 		
-		int cek = 0;
-		int ch1;
+		int cek1 = 0; //variabel untuk looping dalam navigasi soal
+		int cek2; //variabel untuk mengecek tombol yang ditekan oleh user
 		
 		//navigasi soal berupa pilihan untuk pindah ke soal berikutnya atau pindah ke soal sebelumnya
-		while(cek == 0){
+		while(cek1 == 0){
 			printf("\n\tTekan Angka 1 Untuk Lanjut Ke Soal Berikutnya Atau Tekan Angka 0 untuk Kembali Ke Soal Sebelumnya\n\t");
-			ch1 = getch();
-			switch(ch1){
-				case 49:
-					cek = 1;
+			cek2 = getch();
+			switch(cek2){
+				case 49: //jika angka 1 pada keyboard ditekan maka akan keluar dari loop dan program akan menampilkan soal selanjutnya
+					cek1 = 1;
 					break;
-				case 48:
+				case 48: //jika angka 0 pada keyboard ditekan maka akan keluar dari loop dan program akan menampilkan soal sebelumnya karena nilai counter (i) berkurang
 					i = i - 2;
-					cek = 1;
+					cek1 = 1;
 					break;
 				default:
 					printf("INVALID INPUT!!\n");
-					break; //error handling
+					break; //error handling, jika user memberikan input selain angka 1 dan 0 maka looping akan terus berlanjut
 			}
 		}
 		
