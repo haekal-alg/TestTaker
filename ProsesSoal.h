@@ -21,7 +21,9 @@ void SetCursorPosition(int XPos, int YPos){
 }
 
 void timer(int time, int *flag_ujian){
-	int minutes, seconds;
+	int minutes, seconds, count = 0;
+	int sleep_interval = 50;
+	int REFRESH_RATE = 1000/sleep_interval; // 20 fps
 	
 	while (time >= 0){
 		minutes = time / 60;
@@ -32,8 +34,13 @@ void timer(int time, int *flag_ujian){
 		printf("  TIMER %02d:%02d", minutes, seconds);
 		SetCursorPosition(0, 2);
 		
-		time -= 1;
-		Sleep(1000); // interval 1 detik
+		if (count == REFRESH_RATE){
+			time -= 1;
+			count = 0;	
+		}
+		
+		count += 1; 			// perbesar refresh rate (perkecil interval sleep)
+		Sleep(sleep_interval);  // agar timer lebih smooth
 	}
 	
 	*flag_ujian = 0;
