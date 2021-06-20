@@ -14,7 +14,7 @@ void display(char jwb_sementara[SIZE1][SIZE1], char filename[]); //function prot
 int main(){
 	struct Soal_N_Jawaban section; 
 	char filename[] = "sample.txt";
-	
+	int nilai = 0;
 	int front = 0, back = 0;
 	char jawaban[SIZE1]
 	char jwb_sementara[SIZE1][SIZE1];
