@@ -13,42 +13,38 @@ int main(){
 	//login_prompt(); 
 	
 	// ============== SETUP =================
-	int TIME = 2*60 + 2%60; // M : S
+	int TIME = 2*60 + 1%60; // M : S
 	char filename[] = "sample.txt";
-	// ======================================
-	
-	//int nilai = 0;
-	//int front = 0, back = 0;
-	//char jawaban[SIZE1]
-	//char jwb_sementara[SIZE1][SIZE1];
 	
 	int ujian_berlangsung = 1;
 	int *FLAG = &ujian_berlangsung;
-
+	// ======================================
+	
 	if (is_file_valid(filename))
 	{
-		#pragma omp parallel sections 
+		#pragma omp parallel 
 		{	
-			#pragma single
-			HideCursor();
-			//login_prompt(); 
+			// selesaikan dulu login baru lanjut ke proses selanjutnya
+			#pragma omp single
+			login_prompt(); 
 			
-			#pragma omp section 
-	        { 
-	            timer(TIME, FLAG); 
-	        }
-	        #pragma omp section
-	        { 
-	        	// sleep sementara supaya timer di print duluan
-	        	Sleep(100); 			
-				display_test(filename, FLAG); 
-
-	        } 
+			// jalankan timer dan test secara bersamaan
+			#pragma omp single nowait
+			{
+				#pragma omp task
+				{ 
+		            timer(TIME, FLAG); 
+		        }
+		        #pragma omp task
+		        { 
+		        	// sleep sementara supaya timer di print duluan
+		        	Sleep(100); 			
+					display_test(filename, FLAG); 
+	
+		        } 	
+			}
 		}		
 	}
-	
-	
-	
 	return 0;
 }
 

@@ -176,7 +176,7 @@ void timer(int time, int *flag_ujian){
 	// show grade here
 	system("cls");
 	#pragma omp critical
-	printf("\nSHOW GRADE HERE");
+	printf("SHOW GRADE HERE");
 }
 
 // fungsi untuk menampilkan soal sekaligus menerima jawaban,
@@ -215,11 +215,14 @@ void display_test(char filename[], int *flag_ujian){
 			if (is_highlight) SetConsoleTextAttribute(h, WHITE);
 				
 		}
-		printf("\n<<<(1)\t\t\t\t\t\t\t(0)>>>\n");	
+		printf("\n  <<<(1)");
+		for (i = 0; i < strlen(section.soal)-12; i++) printf(" ");
+		printf("(0)>>>\n")	;
 
 		// =============== NAVIGASI SOAL ===============
+		//if (*flag_ujian) 
 		ch = getch();
-		
+		//printf("%s", flag_ujian);
 		// jika ditekan ESC maka konfirmasi test selesai
 		if (ch == ESC){
 			SetCursorPosition(0, 11);
@@ -253,17 +256,8 @@ void display_test(char filename[], int *flag_ujian){
 			else if (ch == 'd' || ch == 'D') jwbn_sementara[num] = 4;
 		}
 					
-		system("cls");
+		if (*flag_ujian) system("cls");
 		SetCursorPosition(0, 2);
 	}
-}
-
-// hide cursor agar blinking tidak keliatan
-void HideCursor(){
-	CONSOLE_CURSOR_INFO cursor;    
-	cursor.bVisible = FALSE;    
-	cursor.dwSize = sizeof(cursor);    
-	HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);    
-	SetConsoleCursorInfo(handle, &cursor);
 }
 
