@@ -20,6 +20,7 @@ int main(){
 	int *FLAG = &ujian_berlangsung;
 	// ======================================
 	
+	// nomor 10 biasanya ke jawab sendiri (?)
 	if (is_file_valid(filename))
 	{
 		#pragma omp parallel 

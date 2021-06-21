@@ -216,11 +216,10 @@ void display_test(char filename[], int *flag_ujian){
 				
 		}
 		printf("\n  <<<(1)");
-		for (i = 0; i < strlen(section.soal)-12; i++) printf(" ");
+		for (i = 0; i < strlen(section.soal)-13; i++) printf(" ");
 		printf("(0)>>>\n")	;
 
 		// =============== NAVIGASI SOAL ===============
-		//if (*flag_ujian) 
 		ch = getch();
 		//printf("%s", flag_ujian);
 		// jika ditekan ESC maka konfirmasi test selesai

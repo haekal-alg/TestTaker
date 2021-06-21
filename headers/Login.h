@@ -48,8 +48,10 @@ int is_login_valid(struct Credential input_cred){
 }
 
 void login_prompt(){
+	int i = 0;
+	char char_pass;
 	struct Credential login_info;
-		
+	
 	while(1){
 		printf("Username:\n");
 		printf("Password: ");
@@ -57,7 +59,18 @@ void login_prompt(){
 		SetCursorPosition(10, 0);
 		scanf("%s", login_info.username);
 		SetCursorPosition(10, 1);
-		scanf("%s", login_info.password);
+		
+		// hide password with asterisk
+		i = 0;
+		strcpy(login_info.password, ""); // flush the last password
+		while(1){
+			char_pass = getch();
+			if (char_pass == 13) break;
+			
+			login_info.password[i] = char_pass;
+			printf("*");
+			i++;
+		}
 		
 		system("cls");
 		if (is_login_valid(login_info)){
