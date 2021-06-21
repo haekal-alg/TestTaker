@@ -1,5 +1,5 @@
 //fungsi untuk menghitung nilai user berdasarkan jumlah benar dan total soal
-int get_grade(){
+int get_grade(char jawaban_sementara[]){
   
   FILE *fptr = fopen(file_jawaban, "r");
   char answer[150];
@@ -11,7 +11,7 @@ int get_grade(){
   int i;
 
   for(i=0; i < banyak_soal; i++){
-		if(jawaban_sementara[i] == answer[i]){
+		if(strcmpi(jawaban_sementara[i], answer[i]) == 0){
 			correctAns ++;
 		}
 	}
