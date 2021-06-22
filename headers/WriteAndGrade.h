@@ -7,7 +7,6 @@ typedef struct node node;
 
 // struct untuk front back dan count
 struct queue{
-    int count;
     node *front;
     node *back;
 };
@@ -15,7 +14,6 @@ typedef struct queue queue;
 
 // inisialisasi nilai front, back, dan count 0
 void initialize(queue *q){
-    q->count = 0;
     q->front = NULL;
     q->back = NULL;
 }
@@ -26,24 +24,19 @@ int isempty(queue *q){
 }
 
 // fungsi untuk menambahkan char ke queue
-void enqueue(queue *q, char value, int banyak_soal){
-    if (q->count < banyak_soal){
-        node *tmp;
-        tmp = malloc(sizeof(node));
-        tmp->data = value;
-        tmp->next = NULL;
-        
-        if(!isempty(q)){
-            q->back->next = tmp;
-            q->back = tmp;
-        }
-        else{
-            q->front = q->back = tmp;
-        }
-        q->count++;
+void enqueue(queue *q, char value){
+    node *tmp;
+    tmp = malloc(sizeof(node));
+    tmp->data = value;
+    tmp->next = NULL;
+    
+    if(!isempty(q)){
+        q->back->next = tmp;
+        q->back = tmp;
     }
-    else
-        printf("Jawaban penuh\n");
+    else{
+        q->front = q->back = tmp;
+    }
 }
 
 // fungsi untuk menghapus char dengan prinsip FIFO
@@ -53,37 +46,49 @@ char dequeue(queue *q){
     
     tmp = q->front;
     q->front = q->front->next;
-    q->count--;
     free(tmp);
     
     return(n);
 }
 
 // fungsi untuk menghitung nilai user berdasarkan jumlah benar dan total soal
-float grade_test(char jawaban_sementara[]){
-	int i;
-	float grade;
-	int correctAns = 0;
-	
-	char filename[] = "sample.txt";
-	int banyak_soal = count_lines(filename)/5; 
-	
-	// answer start from 1
-	char answer[] = "adbdbacbab";
-
+// dengan menggunakan queue
+float grade_test(char jawaban[]){
+	// init jawaban yang benar dengan queue	
+	queue *answer;
+    answer = malloc(sizeof(queue));
+    initialize(answer);
+    
+    enqueue(answer, 'a'); // 1
+    enqueue(answer, 'd'); // 2
+    enqueue(answer, 'b'); // 3
+    enqueue(answer, 'd'); // 4
+    enqueue(answer, 'b'); // 5
+    enqueue(answer, 'a'); // 6
+    enqueue(answer, 'c'); // 7
+    enqueue(answer, 'b'); // 8
+    enqueue(answer, 'a'); // 9
+    enqueue(answer, 'b'); // 10
+    
+    // ubah 1-4 ke a-d
+    int i;
+    char filename[] = "sample.txt";
+    int banyak_soal = count_lines(filename)/5;
+    
+    // compare dengan jawaban user
+	float correctAns = 0;
 	for(i = 0; i < banyak_soal; i++){
-		if (jawaban_sementara[i] == answer[i]){
-			correctAns++;
+		if (jawaban[i] == answer->front->data){
+			correctAns++;	
 		}
+		dequeue(answer);
 	}
-	
-	grade = ((float)correctAns/banyak_soal)*100;
-	
-	return grade;
+
+	return (correctAns/banyak_soal)*100;
 }
 
 // fungsi untuk menyimpan hasil dari ujian ke dalam teks file
-void write_jawaban_to_file(char username[], char jawaban_sementara[]){
+void write_jawaban_to_file(char username[], char jawaban_sementara[], float nilai){
 	time_t currentTime;
 	time(&currentTime);
 	
@@ -102,9 +107,12 @@ void write_jawaban_to_file(char username[], char jawaban_sementara[]){
 	fprintf(file, "%02d:%02d; ",  myTime->tm_hour, myTime->tm_min);
 	
 	// biodata dan nilai
-	float nilai = grade_test(jawaban_sementara);
 	fprintf(file, "%s; %s; %.2f\n", username, jawaban_sementara, nilai);
-											    
+	
+	printf("Submitted %d/%d/%d, ", myTime->tm_mday, myTime->tm_mon+1, myTime->tm_year+1900);	
+	printf("%02d:%02d.\n",  myTime->tm_hour, myTime->tm_min);
+	printf("Username: %s\n", username);
+	printf("Grade = %.2f/100\n", nilai);
 	fclose(file);
 }
 

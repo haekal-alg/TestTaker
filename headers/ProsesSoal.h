@@ -185,23 +185,19 @@ void timer(int time, int *flag_ujian){
 
 // fungsi untuk menampilkan soal sekaligus menerima jawaban,
 // berfungsi juga sebagai navigasi soal (berpindah dari satu soal ke soal yang lain)
-void display_test(char filename[], int *flag_ujian){
+void display_test(char filename[], int *flag_ujian, int *jawaban){
 	int i, j;
 	int num = 1;  // nomor soal sekarang;
 	char ch, container_jawaban[4][SIZE]; // soal yang ada di struct dipindahkan
 										 // ke container agar bisa di loop
+	int banyak_soal = count_lines(filename)/5; 
 	struct Soal_N_Jawaban section;
 	
 	HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
 	
-	// jumlah soal ujian yang akan ditampilkan
-	int banyak_soal = count_lines(filename)/5; 
-	int jwbn_sementara[banyak_soal];
+	for (i = 0; i < banyak_soal; i++) jawaban[i] = 0;
 	
-	for (j = 0; j < banyak_soal; j++) jwbn_sementara[j] = 0; 
-
-	while(*flag_ujian)
-	{	
+	while(*flag_ujian){	
 		section_to_struct(&section, filename, num);
 		strcpy(container_jawaban[0], section.jawaban_a); 
 		strcpy(container_jawaban[1], section.jawaban_b);
@@ -213,7 +209,7 @@ void display_test(char filename[], int *flag_ujian){
 		for (i = 0; i < 4; i++){
 			// cek yang telah dipilih sebelumnya 
 			// jika ada yang telah dijawab maka akan dihighlight
-			int is_highlight = (jwbn_sementara[num-1] != 0 && jwbn_sementara[num-1] == i);
+			int is_highlight = (jawaban[num-1] != 0 && jawaban[num-1] == i+1);
 			
 			if (is_highlight) SetConsoleTextAttribute(h, RED);
 			printf("     %s", container_jawaban[i]);			
@@ -254,10 +250,10 @@ void display_test(char filename[], int *flag_ujian){
 		// =============== INPUT JAWABAN ===============
 		// mengecek setiap jawaban user
 		if ((ch >= 'a' && ch <= 'd') || (ch >= 'A' && ch <= 'D')){
-			if (ch == 'a' || ch == 'A') jwbn_sementara[num-1] = 1;
-			else if (ch == 'b' || ch == 'B') jwbn_sementara[num-1] = 2;	
-			else if (ch == 'c' || ch == 'C') jwbn_sementara[num-1] = 3;
-			else if (ch == 'd' || ch == 'D') jwbn_sementara[num-1] = 4;
+			if (ch == 'a' || ch == 'A') jawaban[num-1] = 1;
+			else if (ch == 'b' || ch == 'B') jawaban[num-1] = 2;	
+			else if (ch == 'c' || ch == 'C') jawaban[num-1] = 3;
+			else if (ch == 'd' || ch == 'D') jawaban[num-1] = 4;
 		}
 		
 		if (*flag_ujian) system("cls");

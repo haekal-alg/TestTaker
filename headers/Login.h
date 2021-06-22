@@ -31,26 +31,27 @@ int is_login_valid(struct Credential input_cred){
 	
 	char file_login[SIZE];
 	int lines = count_lines(filename);
-	
-	#pragma omp parallel num_threads(4)
-	{	// cari login info secara parallel
-		#pragma omp for 
+
+	//#pragma omp parallel num_threads(4) 
+	//{	// cari login info secara parallel
+	//	#pragma omp for 
 		for(i = 0; i < lines; i++){
 	        fgets(file_login, sizeof(file_login), file);
-	        
-	        if (strcmp(combine_cred, file_login) == 0){
-	        	#pragma omp critical
+	        //printf("%s", file_login);
+			//printf("comparing %s with %s", combine_cred, file_login);
+			if (strcmp(combine_cred, file_login) == 0){
+				//#pragma omp critical
 	        	FOUND = 1;
-	        	i = lines; // break
+	        	i = lines+1; // break
 			} 	
 	    }
-	}
-	
+	//}
+
 	fclose(file);
     return FOUND;
 }
 
-void login_prompt(){
+void login_prompt(char **user){
 	int i = 0;
 	char char_pass;
 	struct Credential login_info;
@@ -59,6 +60,7 @@ void login_prompt(){
 		printf("Username:\n");
 		printf("Password: ");
 		
+		strcpy(login_info.username, "");
 		SetCursorPosition(10, 0);
 		scanf("%s", login_info.username);
 		SetCursorPosition(10, 1);
@@ -78,6 +80,13 @@ void login_prompt(){
 		system("cls");
 		if (is_login_valid(login_info)){
 			HideCursor();
+			
+			// pisah @gmail.com dan pass ke parameter user
+			char *token;
+			*user = malloc(SIZE * sizeof(char));
+			token = strtok(login_info.username, "@");
+			strcpy(*user, token);
+			
 			break;
 		}
 		else{
