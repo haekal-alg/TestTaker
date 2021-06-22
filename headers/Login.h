@@ -12,6 +12,13 @@ void HideCursor(){
 	SetConsoleCursorInfo(handle, &cursor);
 }
 
+int login_comparison(char user_input[], char login_info[], int *flag, int *iterator){
+	if (strcmp(user_input, login_info) == 0){
+		*flag = 1;
+		*iterator = count_lines("credential/login.txt");
+	}
+}
+
 int is_login_valid(struct Credential input_cred){
 	int i;
 	int FOUND = 0;
@@ -32,20 +39,16 @@ int is_login_valid(struct Credential input_cred){
 	char file_login[SIZE];
 	int lines = count_lines(filename);
 
-	//#pragma omp parallel num_threads(4) 
-	//{	// cari login info secara parallel
-	//	#pragma omp for 
+	#pragma omp parallel num_threads(4) 
+	{	// cari login info secara parallel
+		#pragma omp for 
 		for(i = 0; i < lines; i++){
 	        fgets(file_login, sizeof(file_login), file);
-	        //printf("%s", file_login);
-			//printf("comparing %s with %s", combine_cred, file_login);
-			if (strcmp(combine_cred, file_login) == 0){
-				//#pragma omp critical
-	        	FOUND = 1;
-	        	i = lines+1; // break
-			} 	
+
+			#pragma omp critical
+			login_comparison(combine_cred, file_login, &FOUND, &i); 	
 	    }
-	//}
+	}
 
 	fclose(file);
     return FOUND;
