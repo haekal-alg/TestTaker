@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdbool.h>
 #include <time.h>
 #include <windows.h>
 #include <omp.h>
@@ -10,16 +9,19 @@
 //#include "WriteAndGrade.h"
 
 int main(){
-	//login_prompt(); 
-	
 	// ============== SETUP =================
 	int TIME = 2*60 + 1%60; // M : S
 	char filename[] = "sample.txt";
+	// ======================================
 	
 	int ujian_berlangsung = 1;
 	int *FLAG = &ujian_berlangsung;
-	// ======================================
 	
+	float nilai;
+	queue *q;
+    q = malloc(sizeof(queue));
+    initialize(q);
+        
 	// nomor 10 biasanya ke jawab sendiri (?)
 	if (is_file_valid(filename))
 	{
@@ -48,5 +50,4 @@ int main(){
 	}
 	return 0;
 }
-
 
