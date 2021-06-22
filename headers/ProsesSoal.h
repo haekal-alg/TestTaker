@@ -28,6 +28,7 @@ int count_lines(char filename[]){
 		// jika menemukan newline maka increment
 		if (c == '\n') count++;
 	}
+	
     fclose(file);
 	return count;	
 }
@@ -105,6 +106,7 @@ int is_file_valid(char filename[]){
 	if (num_lines % 5 != 0){
 		printf("[-] File tidak valid! Pastikan nomor baris benar!\n");
 		printf("[*] Nomor baris %d.", num_lines);
+		fclose(file);
 		return 0;
 	}
 	else{
@@ -136,6 +138,8 @@ int is_file_valid(char filename[]){
 				if (strcmp(temp_jawaban[j], cmp_jawaban[j]) != 0){
 					printf("[-] File tidak valid! Pastikan format soal benar!\n");
 					printf("[*] Cek baris %d.", (i-1)*5 + j + 1);
+					
+					fclose(file);
 					return 0;
 				}
 			}		
@@ -173,10 +177,10 @@ void timer(int time, int *flag_ujian){
 	}
 	*flag_ujian = 0;
 	
-	// show grade here
-	system("cls");
-	#pragma omp critical
-	printf("SHOW GRADE HERE");
+	if (time <= 0){
+		SetCursorPosition(0, 11);
+		printf("  Waktu anda telah habis. Tekan tombol apapun untuk melihat skor anda.");
+	}
 }
 
 // fungsi untuk menampilkan soal sekaligus menerima jawaban,
@@ -196,7 +200,8 @@ void display_test(char filename[], int *flag_ujian){
 	
 	for (j = 0; j < banyak_soal; j++) jwbn_sementara[j] = 0; 
 
-	while(*flag_ujian){
+	while(*flag_ujian)
+	{	
 		section_to_struct(&section, filename, num);
 		strcpy(container_jawaban[0], section.jawaban_a); 
 		strcpy(container_jawaban[1], section.jawaban_b);
@@ -208,7 +213,7 @@ void display_test(char filename[], int *flag_ujian){
 		for (i = 0; i < 4; i++){
 			// cek yang telah dipilih sebelumnya 
 			// jika ada yang telah dijawab maka akan dihighlight
-			int is_highlight = (jwbn_sementara[num] != 0 && jwbn_sementara[num] == i+1);
+			int is_highlight = (jwbn_sementara[num-1] != 0 && jwbn_sementara[num-1] == i);
 			
 			if (is_highlight) SetConsoleTextAttribute(h, RED);
 			printf("     %s", container_jawaban[i]);			
@@ -217,15 +222,15 @@ void display_test(char filename[], int *flag_ujian){
 		}
 		printf("\n  <<<(1)");
 		for (i = 0; i < strlen(section.soal)-13; i++) printf(" ");
-		printf("(0)>>>\n")	;
+		printf("(0)>>>\n");
 
 		// =============== NAVIGASI SOAL ===============
 		ch = getch();
-		//printf("%s", flag_ujian);
+
 		// jika ditekan ESC maka konfirmasi test selesai
 		if (ch == ESC){
 			SetCursorPosition(0, 11);
-			printf("Apakah anda yakin ingin menyelesaikan ujian? <Y/N>");
+			printf("Apakah anda yakin ingin menyelesaikan ujian? <y/n>");
 			
 			ch = getch();
 			if (ch == 'y' || ch == 'Y') *flag_ujian = 0;
@@ -249,12 +254,12 @@ void display_test(char filename[], int *flag_ujian){
 		// =============== INPUT JAWABAN ===============
 		// mengecek setiap jawaban user
 		if ((ch >= 'a' && ch <= 'd') || (ch >= 'A' && ch <= 'D')){
-			if (ch == 'a' || ch == 'A') jwbn_sementara[num] = 1;
-			else if (ch == 'b' || ch == 'B') jwbn_sementara[num] = 2;	
-			else if (ch == 'c' || ch == 'C') jwbn_sementara[num] = 3;
-			else if (ch == 'd' || ch == 'D') jwbn_sementara[num] = 4;
+			if (ch == 'a' || ch == 'A') jwbn_sementara[num-1] = 1;
+			else if (ch == 'b' || ch == 'B') jwbn_sementara[num-1] = 2;	
+			else if (ch == 'c' || ch == 'C') jwbn_sementara[num-1] = 3;
+			else if (ch == 'd' || ch == 'D') jwbn_sementara[num-1] = 4;
 		}
-					
+		
 		if (*flag_ujian) system("cls");
 		SetCursorPosition(0, 2);
 	}

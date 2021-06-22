@@ -39,11 +39,14 @@ int is_login_valid(struct Credential input_cred){
 	        fgets(file_login, sizeof(file_login), file);
 	        
 	        if (strcmp(combine_cred, file_login) == 0){
+	        	#pragma omp critical
 	        	FOUND = 1;
 	        	i = lines; // break
 			} 	
 	    }
 	}
+	
+	fclose(file);
     return FOUND;
 }
 
