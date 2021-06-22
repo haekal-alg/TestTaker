@@ -1,7 +1,7 @@
 //fungsi untuk menghitung nilai user berdasarkan jumlah benar dan total soal
-int get_grade(){
+float get_grade(char jawaban_sementara[]){
   
-  FILE *fptr = fopen(file_jawaban, "r");
+  FILE *fptr = fopen("jawab.txt", "r");
   char answer[150];
   fgets(answer, 150, fptr);
 
@@ -15,7 +15,7 @@ int get_grade(){
 			correctAns ++;
 		}
 	}
-	grade = (float)correctAns/banyak_soal
+	grade = (float)correctAns/banyak_soal;
 	fclose(fptr);
 	return grade;
 
@@ -41,47 +41,68 @@ void write_jawaban(char nama[], int npm, char jawaban_sementara[], float nilai)
 	fclose(fptr);
 }
 
-
-//fungsi untuk mengecek apakah array jawaban sementara penuh
-bool isFullArray(char jawaban_sementara[])
+//struct untuk node 
+struct node
 {
-	if(back == strlen(jawaban_sementara){
-		return true;
-	}
-	else 
-	return false;
+    char data;
+    struct node *next;
+};
+typedef struct node node;
+//struct untuk front back dan count
+struct queue
+{
+    int count;
+    node *front;
+    node *back;
+};
+typedef struct queue queue;
+//inisialisasi nilai front, back, dan count 0
+void initialize(queue *q)
+{
+    q->count = 0;
+    q->front = NULL;
+    q->back = NULL;
 }
-
-
-//fungsi untuk mengecek apakah array jawaban sementara kosong
-bool isEmptyArray(){
-	if(back == 0){
-		return true;
-	}
-	else 
-	return false;
+//cek jika queue kosong
+int isempty(queue *q)
+{
+    return (q->back == NULL);
 }
-
-
-//fungsi untuk menyimpan jawaban sementara ke jawaban asli
-void enqueueArray(char jawaban_sementara[], char jawaban_asli[], int* front, int* back){
-	int i;
-	if(isFullArray()){
-		printf("jawaban melebihi batas!\n");
-	}
-	else{
-		for(i=0; i < strlen(jawaban_sementara); i++)
-		if(isEmptyArray()){
-			strcpy(jawaban_asli[i], jawaban_sementara[i]);
-			*front = *front + 1;
-			*back = *back + 1;
-		}
-		else{
-			strcpy(jawaban_asli[i], jawaban_sementara[i]);
-			*back = *back + 1;
-			
-		}
-	}
+//fungsi untuk menambahkan char ke queue
+void enqueue(queue *q, char value, int banyak_soal)
+{
+    if (q->count < banyak_soal)
+    {
+        node *tmp;
+        tmp = malloc(sizeof(node));
+        tmp->data = value;
+        tmp->next = NULL;
+        if(!isempty(q))
+        {
+            q->back->next = tmp;
+            q->back = tmp;
+        }
+        else
+        {
+            q->front = q->back = tmp;
+        }
+        q->count++;
+    }
+    else
+    {
+        printf("Jawaban penuh\n");
+    }
+}
+//fungsi untuk menghapus char dengan prinsip FIFO
+char dequeue(queue *q)
+{
+    node *tmp;
+    char n = q->front->data;
+    tmp = q->front;
+    q->front = q->front->next;
+    q->count--;
+    free(tmp);
+    return(n);
 }
 
 
