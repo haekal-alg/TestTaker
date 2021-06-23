@@ -1,3 +1,4 @@
+// Muhammad Haekal Al Ghifary <2006577605>
 struct Credential{ 
 	char username[SIZE];
 	char password[SIZE];   

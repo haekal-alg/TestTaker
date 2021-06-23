@@ -1,3 +1,8 @@
+// program ini dibuat oleh
+// Alvito Ikramu Walidain <2006577624>
+// Muhammad Haekal Al Ghifary <2006577605>
+// Rizal Ab'daan <2006577441>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -7,7 +12,8 @@
 #include "headers/ProsesSoal.h"
 #include "headers/Login.h"
 #include "headers/WriteAndGrade.h"
-	
+
+// // Muhammad Haekal Al Ghifary <2006577605>
 int main(){
 	// ============== SETUP =================
 	int TIME = 1*60 + 1%60; // M : S

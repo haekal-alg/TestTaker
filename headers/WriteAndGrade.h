@@ -12,17 +12,20 @@ struct queue{
 };
 typedef struct queue queue;
 
+// Alvito Ikramu Walidain <2006577624>
 // inisialisasi nilai front, back, dan count 0
 void initialize(queue *q){
     q->front = NULL;
     q->back = NULL;
 }
 
+// Alvito Ikramu Walidain <2006577624>
 // cek jika queue kosong
 int isempty(queue *q){
     return (q->back == NULL);
 }
 
+// Alvito Ikramu Walidain <2006577624>
 // fungsi untuk menambahkan char ke queue
 void enqueue(queue *q, char value){
     node *tmp;
@@ -38,7 +41,7 @@ void enqueue(queue *q, char value){
         q->front = q->back = tmp;
     }
 }
-
+// Alvito Ikramu Walidain <2006577624>
 // fungsi untuk menghapus char dengan prinsip FIFO
 char dequeue(queue *q){
     node *tmp;
@@ -50,7 +53,7 @@ char dequeue(queue *q){
     
     return(n);
 }
-
+// Alvito Ikramu Walidain <2006577624>
 // fungsi untuk menghitung nilai user berdasarkan jumlah benar dan total soal
 // dengan menggunakan queue
 float grade_test(char jawaban[]){
@@ -86,7 +89,7 @@ float grade_test(char jawaban[]){
 
 	return (correctAns/banyak_soal)*100;
 }
-
+// Alvito Ikramu Walidain <2006577624>
 // fungsi untuk menyimpan hasil dari ujian ke dalam teks file
 void write_jawaban_to_file(char username[], char jawaban_sementara[], float nilai){
 	time_t currentTime;

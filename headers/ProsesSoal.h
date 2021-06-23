@@ -3,6 +3,7 @@
 #define RED 12
 #define WHITE 15
 
+// Muhammad Haekal Al Ghifary <2006577605>
 // untuk mempermudah penamaan, 
 // kumpulan soal dan jawaban dinamakan section
 struct Soal_N_Jawaban{ 
@@ -13,6 +14,7 @@ struct Soal_N_Jawaban{
 	char jawaban_d[SIZE];
 };
 
+// Muhammad Haekal Al Ghifary <2006577605>
 // menghitung banyaknya line pada file
 int count_lines(char filename[]){
 	char c;
@@ -33,6 +35,7 @@ int count_lines(char filename[]){
 	return count;	
 }
 
+// Muhammad Haekal Al Ghifary <2006577605>
 // fungsi ini mengkopi section ke-n dari file yang telah ditentukan ke struct
 void section_to_struct(struct Soal_N_Jawaban *pointer_section, char filename[], int section_num){
 	struct Soal_N_Jawaban temp;
@@ -88,6 +91,7 @@ void section_to_struct(struct Soal_N_Jawaban *pointer_section, char filename[], 
 	fclose(file);
 }
 
+// Muhammad Haekal Al Ghifary <2006577605>
 int is_file_valid(char filename[]){
 	/* 
 	Syarat file text valid:
@@ -147,6 +151,7 @@ int is_file_valid(char filename[]){
 	}		
 }
 
+// Muhammad Haekal Al Ghifary <2006577605>
 void SetCursorPosition(int XPos, int YPos){
 	COORD coord;
 	coord.X = XPos; 
@@ -154,6 +159,7 @@ void SetCursorPosition(int XPos, int YPos){
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 }
 
+// Muhammad Haekal Al Ghifary <2006577605>
 void timer(int time, int *flag_ujian){
 	int minutes, seconds, count = 0;
 	int sleep_interval = 50;
@@ -183,6 +189,7 @@ void timer(int time, int *flag_ujian){
 	}
 }
 
+// Muhammad Haekal Al Ghifary <2006577605> dan Rizal Ab'daan <2006577441>
 // fungsi untuk menampilkan soal sekaligus menerima jawaban,
 // berfungsi juga sebagai navigasi soal (berpindah dari satu soal ke soal yang lain)
 void display_test(char filename[], int *flag_ujian, int *jawaban){
