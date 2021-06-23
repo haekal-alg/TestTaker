@@ -1,9 +1,9 @@
-// Muhammad Haekal Al Ghifary <2006577605>
 struct Credential{ 
 	char username[SIZE];
 	char password[SIZE];   
 };
 
+// Muhammad Haekal Al Ghifary <2006577605>
 // hide cursor agar blinking tidak keliatan
 void HideCursor(){
 	CONSOLE_CURSOR_INFO cursor;    
@@ -13,6 +13,7 @@ void HideCursor(){
 	SetConsoleCursorInfo(handle, &cursor);
 }
 
+// Muhammad Haekal Al Ghifary <2006577605>
 int login_comparison(char user_input[], char login_info[], int *flag, int *iterator){
 	if (strcmp(user_input, login_info) == 0){
 		*flag = 1;
@@ -20,6 +21,7 @@ int login_comparison(char user_input[], char login_info[], int *flag, int *itera
 	}
 }
 
+// Muhammad Haekal Al Ghifary <2006577605>
 int is_login_valid(struct Credential input_cred){
 	int i;
 	int FOUND = 0;
@@ -55,6 +57,7 @@ int is_login_valid(struct Credential input_cred){
     return FOUND;
 }
 
+// Muhammad Haekal Al Ghifary <2006577605>
 void login_prompt(char **user){
 	int i = 0;
 	char char_pass;
